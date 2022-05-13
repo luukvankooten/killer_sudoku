@@ -2,9 +2,9 @@ import _ from "lodash";
 
 class Item {
 	/**
-	 * @param  {Number}  position [description]
-	 * @param  {TotalSum}	 totalSum
-	 * @param  {Number}  value    [description]
+	 * @param  {Number}  position
+	 * @param  {TotalSum}  totalSum
+	 * @param  {Number}  value
 	 */
 	constructor(position, totalSum, value = 0) {
 		this.position = position;
@@ -14,8 +14,6 @@ class Item {
 
 	toString() {
 		let number = this.value.toString();
-
-		// console.log(number);
 
 		if (this.value === 0) {
 			number = this.totalSum.toString();
@@ -32,9 +30,8 @@ class Item {
 class TotalSum {
 
 	/**
-	 * @param  {Number} totalSum [description]
-	 * @param  {Group} group    [description]
-	 * @return {[type]}          [description]
+	 * @param  {Number} totalSum
+	 * @param  {Group} group
 	 */
 	constructor(totalSum, group) {
 		this.orginalSum = totalSum;
@@ -44,8 +41,6 @@ class TotalSum {
 
 	canSubtract(num) {
 		const sumOf = this.group.items.reduce((p, c) => p + c.value, 0);
-
-		// console.log(this.totalSum, sumOf, num);
 
 		return this.totalSum - (sumOf + num) >= 0;
 	}
@@ -57,8 +52,8 @@ class TotalSum {
 
 class Group {
 	/**
-	 * @param  {number} totalSum [description]
-	 * @param  {number[]} positions [description]
+	 * @param  {number} totalSum
+	 * @param  {number[]} positions
 	 */
 	constructor(totalSum, positions) {
 		const sum = new TotalSum(totalSum, this);
@@ -101,8 +96,8 @@ class Board {
 	}
 
 	/**
-	 * @param  {Item[][]} board [description]
-	 * @return {[type]}       [description]
+	 * @param  {Item[][]} board
+	 * @return {Boolean}
 	 */
 	solve(board) {
 		const empty = this.findEmpty(board);
@@ -130,10 +125,11 @@ class Board {
 	}
 
 	/**
-	 * @param  {Item[][]} board [description]
+	 * @param  {Item[][]} board
 	 * @param  {Number} num
-	 * @param  {[Number, Number]} pos
-	 * @return {Boolean}      [description]
+	 * @param  {Number} row
+	 * @param  {Number} col
+	 * @return {Boolean}
 	 */
 	valid(board, num, row, col) {
 		//Check row
@@ -162,9 +158,8 @@ class Board {
 			}
 		}
 
-		let item = board[row][col];
-
-		const subtract = item.totalSum.canSubtract(num);
+		//Check killer
+		const subtract = board[row][col].totalSum.canSubtract(num);
 
 		if (!subtract) {
 			return false;
@@ -174,7 +169,6 @@ class Board {
 	}
 
 	/**
-	 * [findEmpty description]
 	 * @param  {Item[][]} board
 	 * @return {[Number, Number]} first row second column
 	 */
@@ -188,10 +182,6 @@ class Board {
 		}
 
 		return undefined;
-	}
-
-	findGroupByItem(item) {
-		return this.groups.find(g => g.items.includes(item))
 	}
 
 	draw() {
